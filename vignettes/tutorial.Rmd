@@ -1,0 +1,82 @@
+---
+title: "Tutorial the package to draw earthquake timeline"
+author: "xxxw567"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo=FALSE}
+library(MasterRcap)
+library(magrittr)
+library(ggplot2)
+library(grid)
+options(width = 120)
+```
+## Read and clean the data
+
+Read and clean the data using `eq_clean_data` function
+```{r, message=FALSE, WARNING=FALSE}
+raw_data_fn <- file.path(system.file("extdata", package="MasterRcap"),"signif.txt")
+data <- eq_clean_data(raw_data_fn)
+str(data)
+```
+
+
+## Draw earthquake timeline
+
+The follong snippet draws earthquakes observed in the US and Canada from 2000
+```{r, fig.show='hold', message=FALSE, warning=FALSE}
+    eq_clean_data() %>%
+        dplyr::filter(YEAR > 2000 & !IS_BC & COUNTRY %in% c("USA", "CANADA")) %>%
+        dplyr::mutate(TOTAL_DEATHS = as.numeric(TOTAL_DEATHS),
+                      EQ_PRIMARY = as.numeric(EQ_PRIMARY)) %>%
+        ggplot2::ggplot(ggplot2::aes(x = DATE,
+                                     y = COUNTRY,
+                                     colour = TOTAL_DEATHS,
+                                     size = EQ_PRIMARY
+                                     )) +
+        geom_timeline() +
+	theme_timeline() +
+	labs(size = "Richter scale value", color = "# deaths", fill = "# deaths")
+```
+
+## Draw earthquake timeline with labels
+
+The follong snippet draws earthquakes observed in the US and Canada from 2000 using:
+* `geom_timeline` as previously to draw the timeline
+* `geom_timeline_label` to add the labels.`
+
+```{r, fig.show='hold', message=FALSE, warning=FALSE}
+    eq_clean_data() %>%
+        dplyr::filter(YEAR > 2000 & !IS_BC & COUNTRY %in% c("USA", "CANADA")) %>%
+        dplyr::mutate(TOTAL_DEATHS = as.numeric(TOTAL_DEATHS),
+                      EQ_PRIMARY = as.numeric(EQ_PRIMARY)) %>%
+        ggplot2::ggplot(ggplot2::aes(x = DATE,
+                                     y = COUNTRY,
+                                     colour = TOTAL_DEATHS,
+                                     size = EQ_PRIMARY
+                                     )) +
+        geom_timeline() +
+	theme_timeline() +
+	labs(size = "Richter scale value", color = "# deaths") +
+	geom_timeline_label(ggplot2::aes(label = LOCATION_NAME), n_max = 3)
+
+```
+
+## Visualize the earthquakes on a map with leaflet
+
+The follong snippet map the earthquakes observed in the Mexico from 2000. It uses
+* the input that we saw previously
+* the `eq_map` function that draw a circle at each earthquake
+* the `eq_create_label` function that create labels.
+
+```{r, fig.show='hold', message=FALSE, warning=FALSE}
+    eq_clean_data() %>%
+        dplyr::filter(YEAR > 2000 & !IS_BC & COUNTRY %in% c("MEXICO")) %>%
+        dplyr::mutate(popup_text = eq_create_label(.)) %>%
+        eq_map(annot_col = "popup_text")
+```
