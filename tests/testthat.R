@@ -1,4 +1,5 @@
 library(testthat)
-library(MasterRCap)
+library(MasterRcap)
+library(dplyr)
 
-test_check("MasterRCap")
+test_check("MasterRcap")

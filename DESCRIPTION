@@ -4,7 +4,7 @@ Version: 0.0.1.0
 Authors@R: person("xxxw567", "xxxw567", email = "xiayiweinemo@gmail.com", role = c("aut", "cre"))
 Description: This project consists of the main project for the Coursera's R Programming Capstone Course, which is part of the specialization "Mastering Software Development in R".
 Depends: R (>= 3.4.0)
-License: MIT + file LICENSE
+License: CC0
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1

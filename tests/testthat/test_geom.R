@@ -1,5 +1,5 @@
 test_that("geom_timeline returns a ggplot", {
-    g <- read_eq_clean_data() %>%
+    g <- eq_clean_data() %>%
         dplyr::filter(YEAR > 2000 & !IS_BC & COUNTRY %in% c("USA", "CANADA")) %>%
         dplyr::mutate(TOTAL_DEATHS = as.numeric(TOTAL_DEATHS),
                       EQ_PRIMARY = as.numeric(EQ_PRIMARY)) %>%
@@ -15,7 +15,7 @@ test_that("geom_timeline returns a ggplot", {
 
 
 test_that("geom_timeline_label returns also a ggplot", {
-    g <- read_eq_clean_data() %>%
+    g <- eq_clean_data() %>%
         dplyr::filter(YEAR > 2000 & !IS_BC & COUNTRY %in% c("USA", "CANADA")) %>%
         dplyr::mutate(TOTAL_DEATHS = as.numeric(TOTAL_DEATHS),
                       EQ_PRIMARY = as.numeric(EQ_PRIMARY)) %>%
